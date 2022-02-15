@@ -6,11 +6,8 @@ public class ServerStr
 {
   ServerSocket server      = null;
   Socket client            = null;
-  //String stringaRicevuta   = null;
-  //String stringaModificata = null;
-  int primoOperandoRicev;
-  int secondoOperandoRicev;
-  double risultato;
+  String stringaRicevuta   = null;
+  String stringaModificata = null;
   BufferedReader   inDalClient; 
   DataOutputStream outVersoClient;
     
@@ -29,7 +26,8 @@ public class ServerStr
       inDalClient = new BufferedReader(new InputStreamReader (client.getInputStream()));
       outVersoClient = new DataOutputStream(client.getOutputStream());
     }
-    catch (Exception e) {
+    catch (Exception e) 
+    {
       System.out.println(e.getMessage());
       System.out.println("Errore durante l'istanza del server !");
       System.exit(1);
@@ -43,13 +41,13 @@ public class ServerStr
     {
       // rimango in attesa della riga trasnmessa dal client
       System.out.println("3 benvenuto client, scrivi una frase e la trasformo in maiuscolo. Attendo ...");
-      primoOperandoRicev = Integer.valueOf(inDalClient.read());
-      System.out.println("6 ricevuta la stringa dal cliente : "+primoOperandoRicev);
+      stringaRicevuta = inDalClient.readLine();
+      System.out.println("6 ricevuta la stringa dal cliente : "+stringaRicevuta);
         
       //la modifico e la rispedisco al client  
-      risultato = primoOperandoRicev ++;
+      stringaModificata=stringaRicevuta.toUpperCase();
       System.out.println("7 invio la stringa modificata al client ...");
-      outVersoClient.writeDouble(risultato);
+      outVersoClient.writeBytes(stringaModificata+'\n');
        
       //termina elaborazione sul server : chiudo la connessione del client 
       System.out.println("9 SERVER: fine elaborazione  ... buona notte!");

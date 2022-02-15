@@ -1,34 +1,26 @@
 import java.io.*;
 import java.net.*;
-import java.util.Scanner;
 public class ClientStr {
   String nomeServer ="localhost";                  // indirizzo server locale  
   int portaServer   = 6789;                        // porta x servizio data e ora
   Socket miosocket;                                
-  Scanner tastiera;                         // buffer per l'input da tastiera
-  //String stringaUtente;                           // stringa inserita da utente
-  int primoOperando;
-  int secondoOperando;
-  char operazione;
-
-  //String stringaRicevutaDalServer;                 // stringa ricevuta dal server
-  double operazioneCalcolataDalServer;
+  BufferedReader tastiera;                         // buffer per l'input da tastiera
+  String stringaUtente;                            // stringa inserita da utente
+  String stringaRicevutaDalServer;                 // stringa ricevuta dal server
   DataOutputStream outVersoServer;                 // stream di output
   BufferedReader inDalServer;                      // stream di input 
 
   public void comunica() {
     try                      // leggo una riga
     {
-      System.out.println("inserisci il primo oerando:");
-      primoOperando = Integer.parseInt(tastiera.readLine());
+      System.out.println("4 ...  inserisci la stringa da trasmettere al server:"+'\n');
+      stringaUtente = tastiera.readLine();
       //la spedisco al server 
       System.out.println("5 ... invio la stringa al server e attendo ...");
-      outVersoServer.writeInt(primoOperando);
-      System.out.println(primoOperando);
+      outVersoServer.writeBytes( stringaUtente+'\n');
       //leggo la risposta dal server 
-      operazioneCalcolataDalServer=Double.parseDouble(inDalServer.readLine());
-      System.out.println(operazioneCalcolataDalServer);     //2controlla sia tornato corretto
-      System.out.println("8 ... risposta dal server "+'\n'+operazioneCalcolataDalServer);
+      stringaRicevutaDalServer=inDalServer.readLine();
+      System.out.println("8 ... risposta dal server "+'\n'+stringaRicevutaDalServer );
       // chiudo la connessione
       System.out.println("9 CLIENT: termina elaborazione e chiude connessione" );
       miosocket.close(); 
@@ -45,7 +37,7 @@ public class ClientStr {
     try 
     {
       // per l'input da tastiera
-      tastiera = new Scanner
+      tastiera = new BufferedReader(new InputStreamReader(System.in));
       // creo un socket  
       miosocket = new Socket(nomeServer,portaServer);
       // miosocket = new Socket(InetAddress.getLocalHost(), 6789);
