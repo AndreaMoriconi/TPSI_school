@@ -6,9 +6,9 @@ public class ServerStr
 {
   ServerSocket server      = null;
   Socket client            = null;
-  String stringaRicevuta   = null;
+  int timer = 10;
   String stringaModificata = null;
-  BufferedReader   inDalClient; 
+  DataInputStream   inDalClient; 
   DataOutputStream outVersoClient;
     
   public Socket attendi() 
@@ -23,7 +23,7 @@ public class ServerStr
       // chiudo il server per inibire altri client
       server.close();
       //associo due oggetti al socket del client per effettuare la scrittura e la lettura 
-      inDalClient = new BufferedReader(new InputStreamReader (client.getInputStream()));
+      inDalClient = new DataInputStream(client.getInputStream());
       outVersoClient = new DataOutputStream(client.getOutputStream());
     }
     catch (Exception e) 
@@ -41,13 +41,14 @@ public class ServerStr
     {
       // rimango in attesa della riga trasnmessa dal client
       System.out.println("3 benvenuto client, scrivi una frase e la trasformo in maiuscolo. Attendo ...");
-      stringaRicevuta = inDalClient.readLine();
-      System.out.println("6 ricevuta la stringa dal cliente : "+stringaRicevuta);
+      timer = inDalClient.readInt();
+      timer --;
+      System.out.println("6 ricevuta la stringa dal cliente : "+timer);
         
       //la modifico e la rispedisco al client  
-      stringaModificata=stringaRicevuta.toUpperCase();
+      //stringaModificata=stringaRicevuta.toUpperCase();
       System.out.println("7 invio la stringa modificata al client ...");
-      outVersoClient.writeBytes(stringaModificata+'\n');
+      outVersoClient.writeInt(timer);
        
       //termina elaborazione sul server : chiudo la connessione del client 
       System.out.println("9 SERVER: fine elaborazione  ... buona notte!");
